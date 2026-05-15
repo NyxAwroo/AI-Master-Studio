@@ -188,6 +188,6 @@ MIT. Personal project, free to use and modify.
 
 <div align="center">
 
-Made with ❤️ by **votre-pseudo** · Powered by [Tauri](https://tauri.app) and a lot of coffee ☕
+Made with ❤️ by **NyxAwroo** · Powered by [Tauri](https://tauri.app) and a lot of coffee ☕
 
 </div>
