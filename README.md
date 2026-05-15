@@ -34,6 +34,8 @@ AI Master Studio is a single place to keep everything you would otherwise scatte
 - **Backup & Restore** — full or partial JSON export/import, compatible with previous versions.
 - **Multilingual interface** — French and English shipped by default, more languages can be added by anyone with a single JSON file (see [Contributing translations](#-contributing-translations)).
 
+<img src="https://github.com/NyxAwroo/AI-Master-Studio/blob/main/screenshots/v1/text%20GPTs%20(1).png" alt="Aperçu AI Master Studio" width="35%"> <img src="https://github.com/NyxAwroo/AI-Master-Studio/blob/main/screenshots/v1/studio%20IMG%20(1).png" alt="Aperçu AI Master Studio" width="35%"> 
+
 All data lives in your user data folder (`%APPDATA%\com.nicol.ai-master-studio-v35\settings.bin` on Windows — the path is kept stable across versions so updates never lose your data) via the official `@tauri-apps/plugin-store`.
 
 ---
