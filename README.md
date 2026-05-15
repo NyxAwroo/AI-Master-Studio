@@ -4,8 +4,7 @@
 
 **A local-first desktop app to organize your AI prompts and your generated-image library.**
 
-Originally a Chrome extension — now a full native desktop app built with Tauri 2.
-No telemetry. No cloud. Your data stays on your disk.
+
 
 ![Version](https://img.shields.io/badge/version-3.6.0-10a37f?style=for-the-badge)
 ![License](https://img.shields.io/badge/license-MIT-blue?style=for-the-badge)
@@ -20,6 +19,8 @@ No telemetry. No cloud. Your data stays on your disk.
 ![Contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen)
 
 </div>
+
+
 
 ---
 
