@@ -75,7 +75,7 @@ If you are coming from an older version and have an `ai_master_backup_*.json` fi
 
 ---
 
-## 📦 Build a portable .exe
+## 📦 Build a portable .exe ///// AVOID, because I coded to be used just with  "2-Lancer" (that's more easy for updates) //////
 
 For a standalone executable that doesn't need a terminal:
 
