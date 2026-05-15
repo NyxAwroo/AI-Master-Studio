@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>AI Master</title>
+  <link rel="stylesheet" href="panel.css">
+</head>
+<body>
+
+  <nav class="tabs">
+    <button class="tab-btn active" data-target="view-splitter" data-i18n="tabs.splitter">🔪 Splitter</button>
+    <button class="tab-btn" data-target="view-library" data-i18n="tabs.library">📚 Text GPTs</button>
+    <button class="tab-btn" data-target="view-images" data-i18n="tabs.images">🎨 Studio Img</button>
+    <button id="btnShortcuts" class="icon-btn" style="background:transparent; margin-left:auto;" data-i18n-attr="title:tabs.shortcuts" title="Raccourcis clavier (?)">⌨️</button>
+    <button id="btnOpenSettings" class="icon-btn" style="background:transparent;" data-i18n-attr="title:tabs.settings" title="Paramètres &amp; Backup">⚙️</button>
+  </nav>
+
+  <div id="bulkActionBar" class="bulk-bar hidden">
+    <span id="bulkCount">0 sélectionné(s)</span>
+    <div class="bulk-actions">
+      <button id="btnBulkMove" class="secondary small-btn" data-i18n="bulk.move">Dossier</button>
+      <button id="btnBulkTags" class="secondary small-btn" data-i18n="bulk.tags">Tags</button>
+      <button id="btnBulkExport" class="secondary small-btn" data-i18n="bulk.export">Exporter</button>
+      <button id="btnBulkDelete" class="danger small-btn" data-i18n="bulk.delete">Supprimer</button>
+      <button id="btnBulkCancel" class="icon-btn small-icon">×</button>
+    </div>
+  </div>
+
+  <div id="view-splitter" class="tab-content active">
+    <button id="btnScrapePage" class="secondary full-width dashed-btn" style="margin-bottom:15px;" data-i18n="splitter.scrape">📥 Importer texte page active</button>
+    
+    <div class="settings-group"><label data-i18n="splitter.model">Modèle :</label><div class="input-row"><select id="modelSelect"></select><button id="btnDeletePreset" class="icon-btn danger">🗑️</button></div></div>
+    <div class="settings-group"><label data-i18n="splitter.limit">Limite :</label><input type="number" id="customLimit"></div>
+    <div class="save-area"><input type="text" id="newPresetName" placeholder="Nouveau preset..." data-i18n-attr="placeholder:splitter.newPreset"><button id="btnSavePreset" class="secondary small-btn">💾</button></div>
+    <hr class="separator">
+    <textarea id="inputText" placeholder="Collez votre long prompt ici..." data-i18n-attr="placeholder:splitter.inputPlaceholder"></textarea>
+    <div class="actions"><button id="btnSplit" class="primary" data-i18n="splitter.split">Découper</button><button id="btnClear" class="secondary" data-i18n="splitter.clear">Effacer</button></div>
+    <div id="resultsArea"></div>
+  </div>
+
+  <div id="view-library" class="tab-content">
+    <div id="libraryListView">
+      <div class="toolbar"><div class="search-box"><span class="search-icon">🔍</span><input type="text" id="searchLibrary" placeholder="Rechercher (titre, tags, prompt, étapes)..." data-i18n-attr="placeholder:library.searchPlaceholder"></div><button id="btnGptViewToggle" class="icon-btn small-icon" data-i18n-attr="title:library.toggleView" title="Basculer vue liste/grille">▦</button><input type="range" min="1" max="6" value="1" class="slider" id="gptZoomSlider" style="width:80px;"><button id="btnImportPartial" class="icon-btn small-icon" data-i18n-attr="title:library.importPartial" title="Importer un export partiel">📥</button><button id="btnOpenCreate" class="primary small-btn">+</button><input type="file" id="filePartialImport" accept=".json" style="display:none;"></div>
+      <div class="folders-bar-container"><div id="foldersList" class="folders-list"></div><button id="btnNewFolder" class="icon-btn small-icon">📂+</button></div>
+      <div id="libraryList" class="library-container"></div>
+    </div>
+    <div id="gptDetailView" class="hidden">
+      <div class="detail-header"><button id="btnBackToList" class="secondary small-btn" data-i18n="library.back">←</button><div class="detail-title-group"><h3 id="detailTitle">Title</h3><div id="detailTags" class="tags-container"></div></div><div class="header-actions"><button id="btnEditCurrentGPT" class="icon-btn" data-i18n-attr="title:library.editGpt">✎</button><button id="btnDeleteCurrentGPT" class="icon-btn danger" data-i18n-attr="title:library.deleteGpt">🗑️</button></div></div>
+      <div id="gptGlobalNote" class="personal-note hidden"></div>
+      <div class="detail-content">
+        <div class="step-card system-card"><div class="step-header"><span class="step-badge system">SYSTEM</span></div><div class="prompt-preview" id="detailSystemPrompt"></div><button class="copy-prompt-btn" id="btnCopySystem" data-i18n="library.copy">Copier</button></div>
+        <div class="timeline-connector"></div>
+        <div id="stepsList" class="steps-container"></div>
+        <button id="btnOpenAddStep" class="secondary full-width dashed-btn" data-i18n="library.addStep">+ Étape</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="view-images" class="tab-content">
+    <div id="imgGalleryView">
+        <div class="toolbar">
+            <div class="search-box"><span class="search-icon">🔍</span><input type="text" id="searchImages" placeholder="Rechercher (titre, prompt, paramètres, étapes)..." data-i18n-attr="placeholder:images.searchPlaceholder"></div>
+            <input type="range" min="1" max="8" value="2" class="slider" id="imageZoomSlider">
+            <button id="btnImportPartialImg" class="icon-btn small-icon" data-i18n-attr="title:library.importPartial" title="Importer un export partiel">📥</button>
+            <button id="btnOpenCreateImg" class="primary small-btn">🎨+</button>
+            <input type="file" id="filePartialImportImg" accept=".json" style="display:none;">
+        </div>
+      
+      <div class="folders-bar-container">
+        <span class="filter-label" data-i18n="images.category">Cat:</span>
+        <div id="imgCategoryList" class="folders-list"></div>
+        <button id="btnNewImgCategory" class="icon-btn small-icon">📂+</button>
+      </div>
+
+      <div class="folders-bar-container">
+        <span class="filter-label" data-i18n="images.model">Mod:</span>
+        <button id="btnManageModels" class="icon-btn small-icon" data-i18n-attr="title:images.manageModels" title="Gérer" style="margin-right:5px;">⚙️</button>
+        <div id="imgModelFilterList" class="folders-list"></div>
+      </div>
+
+      <div id="imageGalleryGrid" class="gallery-grid"></div>
+    </div>
+
+    <div id="imgDetailView" class="hidden">
+      <div class="detail-header"><button id="btnBackToGallery" class="secondary small-btn" data-i18n="library.back">←</button><div class="detail-title-group"><h3 id="imgDetailTitle">Title</h3><span id="imgDetailModel" class="model-badge">Modèle</span></div><div class="header-actions"><button id="btnEditCurrentImg" class="icon-btn" data-i18n-attr="title:images.editImg">✎</button><button id="btnDeleteCurrentImg" class="icon-btn danger" data-i18n-attr="title:images.deleteImg">🗑️</button></div></div>
+      <div class="detail-content">
+        <div id="imgShowcase" class="img-showcase-container"></div>
+        <div class="step-card"><div class="step-header"><span class="step-badge step" data-i18n="images.prompt">PROMPT</span></div><div class="prompt-preview" id="imgDetailPrompt"></div><button class="copy-prompt-btn" id="btnCopyImgPrompt" data-i18n="library.copy">Copier</button></div>
+        <div id="imgParamsContainer" class="step-card hidden"><div class="step-header"><span class="step-badge system" data-i18n="images.params">PARAMÈTRES</span></div><div class="prompt-preview" id="imgDetailParams"></div><button class="copy-prompt-btn" id="btnCopyImgParams" data-i18n="library.copy">Copier</button></div>
+        <div class="timeline-connector"></div>
+        <div id="imgStepsList" class="steps-container"></div>
+        <button id="btnOpenAddImgStep" class="secondary full-width dashed-btn" data-i18n="images.addStep">+ Ajouter étape</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="shortcutsModal" class="modal-overlay hidden">
+    <div class="modal-content">
+      <div class="modal-header"><h3 data-i18n="shortcuts.title">⌨️ Raccourcis clavier</h3><button id="btnCloseShortcuts" class="close-btn">&times;</button></div>
+      <div class="modal-body scrollable-body">
+        <h4 style="margin:5px 0 8px;color:#10a37f;" data-i18n="shortcuts.section.navigation">Navigation</h4>
+        <div class="shortcut-row"><kbd>Ctrl</kbd>+<kbd>1</kbd>&nbsp;/&nbsp;<kbd>2</kbd>&nbsp;/&nbsp;<kbd>3</kbd><span data-i18n="shortcuts.tabs">Onglet Splitter / Text GPTs / Studio Img</span></div>
+        <div class="shortcut-row"><kbd>Ctrl</kbd>+<kbd>F</kbd><span data-i18n="shortcuts.focusSearch">Focus dans le champ recherche</span></div>
+        <div class="shortcut-row"><kbd>Ctrl</kbd>+<kbd>N</kbd><span data-i18n="shortcuts.newItem">Créer un nouveau prompt / une nouvelle image</span></div>
+
+        <h4 style="margin:15px 0 8px;color:#10a37f;" data-i18n="shortcuts.section.multiSelect">Sélection multiple</h4>
+        <div class="shortcut-row"><kbd>Ctrl</kbd>+<kbd>clic</kbd><span data-i18n="shortcuts.toggle">Ajouter / retirer un élément de la sélection</span></div>
+        <div class="shortcut-row"><kbd>Shift</kbd>+<kbd>clic</kbd><span data-i18n="shortcuts.range">Sélectionner une plage continue</span></div>
+        <div class="shortcut-row"><kbd>Ctrl</kbd>+<kbd>A</kbd><span data-i18n="shortcuts.selectAll">Tout sélectionner dans la vue actuelle</span></div>
+        <div class="shortcut-row"><kbd>Échap</kbd><span data-i18n="shortcuts.deselect">Désélectionner / fermer une modale</span></div>
+        <div class="shortcut-row"><kbd>Suppr</kbd><span data-i18n="shortcuts.delete">Supprimer la sélection (avec confirmation)</span></div>
+
+        <h4 style="margin:15px 0 8px;color:#10a37f;" data-i18n="shortcuts.section.tips">Astuces</h4>
+        <div class="shortcut-row"><kbd>?</kbd><span data-i18n="shortcuts.help">Afficher ce menu</span></div>
+        <div class="shortcut-row"><kbd>Glisser-déposer</kbd><span data-i18n="shortcuts.dragImages">Importer des images directement dans une modale (Studio Img)</span></div>
+        <div class="shortcut-row"><kbd>Glisser ☰</kbd><span data-i18n="shortcuts.dragReorder">Réordonner les étapes dans la vue détail</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="settingsModal" class="modal-overlay hidden">
+    <div class="modal-content">
+      <div class="modal-header"><h3 data-i18n="settings.title">Paramètres & Backup</h3><button id="btnCloseSettings" class="close-btn">&times;</button></div>
+      <div class="modal-body">
+        <label data-i18n="settings.language" style="font-size:13px; color:#cbd5e1;">Langue de l'interface</label>
+        <select id="languageSelect" style="margin-bottom:6px;"></select>
+        <p style="font-size:11px; color:#9ca3af; margin-top:0;" data-i18n="settings.languageHint">Les contributeurs peuvent ajouter d'autres langues dans le dossier src/locales/ sur GitHub.</p>
+        <hr style="width:100%; border:0; border-top:1px solid #565869;">
+        <p style="font-size:12px; color:#9ca3af;" data-i18n="settings.exportDescription">Exportez toutes vos données (GPTs, Images, Dossiers) en JSON pour les sauvegarder ou les transférer.</p>
+        <button id="btnExportJSON" class="primary full-width" data-i18n="settings.exportBtn">💾 Exporter le Backup (.json)</button>
+        <hr style="width:100%; border:0; border-top:1px solid #565869;">
+        <p style="font-size:12px; color:#9ca3af;" data-i18n="settings.importDescription">Restaurer un backup (écrase ou fusionne les données actuelles).</p>
+        <!-- Faux file input : l'input natif est caché et déclenché par le bouton, ce qui permet la traduction -->
+        <div class="file-picker" style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+          <button type="button" id="btnPickRestoreFile" class="secondary small-btn" data-i18n="settings.chooseFile">Choisir un fichier</button>
+          <span id="restoreFileName" style="font-size:12px; color:#9ca3af;" data-i18n="settings.noFile">Aucun fichier sélectionné</span>
+          <input type="file" id="fileImportJSON" accept=".json" style="display:none;">
+        </div>
+        <button id="btnImportJSON" class="secondary full-width" data-i18n="settings.importBtn">📥 Restaurer</button>
+        <hr style="width:100%; border:0; border-top:1px solid #565869;">
+        <p style="font-size:11px; color:#6b7280; text-align:center; margin:0;"><span data-i18n="settings.version">Version</span> <span id="appVersion">3.6.0</span></p>
+      </div>
+    </div>
+  </div>
+
+  <div id="bulkMoveModal" class="modal-overlay hidden">
+    <div class="modal-content">
+      <div class="modal-header"><h3 data-i18n="modal.move.title">Déplacer la sélection</h3><button id="btnCloseBulkMove" class="close-btn">&times;</button></div>
+      <div class="modal-body">
+        <label data-i18n="modal.move.label">Choisir le dossier de destination :</label>
+        <select id="bulkMoveSelect"></select>
+      </div>
+      <div class="modal-footer"><button id="btnConfirmBulkMove" class="primary full-width" data-i18n="modal.move.confirm">Déplacer</button></div>
+    </div>
+  </div>
+
+  <div id="bulkTagsModal" class="modal-overlay hidden">
+    <div class="modal-content">
+      <div class="modal-header"><h3 data-i18n="modal.tags.title">Tags de la sélection</h3><button id="btnCloseBulkTags" class="close-btn">&times;</button></div>
+      <div class="modal-body">
+        <label data-i18n="modal.tags.mode">Mode</label>
+        <select id="bulkTagsMode">
+          <option value="add" data-i18n="modal.tags.add">Ajouter ces tags</option>
+          <option value="remove" data-i18n="modal.tags.remove">Retirer ces tags</option>
+          <option value="replace" data-i18n="modal.tags.replace">Remplacer par ces tags</option>
+        </select>
+        <label data-i18n="modal.tags.label">Tags (séparés par des virgules)</label>
+        <input type="text" id="bulkTagsInput" placeholder="ex: code, python, retouche" data-i18n-attr="placeholder:modal.tags.placeholder">
+      </div>
+      <div class="modal-footer"><button id="btnConfirmBulkTags" class="primary full-width" data-i18n="modal.tags.apply">Appliquer</button></div>
+    </div>
+  </div>
+
+  <div id="imgCategoryModal" class="modal-overlay hidden">
+    <div class="modal-content">
+      <div class="modal-header"><h3 data-i18n="modal.imgCat.title">Nouvelle Catégorie Image</h3><button id="btnCloseImgCategory" class="close-btn">&times;</button></div>
+      <div class="modal-body"><input type="text" id="imgCategoryNameInput" placeholder="Ex: Bricolage" data-i18n-attr="placeholder:modal.imgCat.placeholder"></div>
+      <div class="modal-footer"><button id="btnSaveImgCategory" class="primary full-width" data-i18n="modal.imgCat.create">Créer</button></div>
+    </div>
+  </div>
+
+  <div id="editModal" class="modal-overlay hidden"><div class="modal-content"><div class="modal-header"><h3 id="modalTitle" data-i18n="modal.gpt.title">GPT</h3><button id="btnCloseModal" class="close-btn">&times;</button></div><div class="modal-body"><input type="hidden" id="editId"><label data-i18n="modal.gpt.name">Nom</label><input type="text" id="gptName"><label data-i18n="modal.gpt.folder">Dossier</label><div class="input-row"><select id="gptFolderSelect"></select><button id="btnQuickNewFolder" class="secondary small-btn" data-i18n-attr="title:modal.gpt.newFolder" title="Créer un nouveau dossier">📂+</button></div><label data-i18n="modal.gpt.tagsLabel">Tags</label><input type="text" id="gptTags"><label data-i18n="modal.gpt.coverLabel">Image de couverture (optionnel)</label><div class="drop-row"><div class="drop-zone" id="dropZoneGpt"><span class="placeholder" data-i18n="modal.gpt.dropImage">📷 Glissez une image</span><input type="file" accept="image/*" class="hidden-file" id="fileGpt"><img id="previewGpt" class="preview-img hidden"><button class="remove-img-btn hidden" data-target="previewGpt">×</button></div></div><label data-i18n="modal.gpt.note">Note</label><textarea id="gptNote" class="note-input"></textarea><label data-i18n="modal.gpt.prompt">Prompt</label><textarea id="gptPrompt"></textarea></div><div class="modal-footer"><button id="btnSaveGPT" class="primary full-width" data-i18n="modal.gpt.save">Sauvegarder</button></div></div></div>
+  <div id="stepModal" class="modal-overlay hidden"><div class="modal-content"><div class="modal-header"><h3 data-i18n="modal.step.title">Étape</h3><button id="btnCloseStepModal" class="close-btn">&times;</button></div><div class="modal-body"><input type="hidden" id="stepEditId"><label data-i18n="modal.step.label">Titre</label><input type="text" id="stepLabel"><label data-i18n="modal.step.image">Image (optionnel)</label><div class="drop-row"><div class="drop-zone small-drop" id="dropZoneGptStep"><span class="placeholder" data-i18n="modal.gpt.dropImage">📷 Glissez une image</span><input type="file" accept="image/*" class="hidden-file" id="fileGptStep"><img id="previewGptStep" class="preview-img hidden"><button class="remove-img-btn hidden" data-target="previewGptStep">×</button></div></div><label data-i18n="modal.step.note">Note</label><textarea id="stepNote" class="note-input"></textarea><label data-i18n="modal.step.prompt">Prompt</label><textarea id="stepContent"></textarea></div><div class="modal-footer"><button id="btnSaveStep" class="primary full-width" data-i18n="modal.step.confirm">Valider</button></div></div></div>
+  <div id="folderModal" class="modal-overlay hidden"><div class="modal-content"><div class="modal-header"><h3 data-i18n="modal.folder.title">Dossier GPT</h3><button id="btnCloseFolderModal" class="close-btn">&times;</button></div><div class="modal-body"><input type="text" id="folderNameInput" placeholder="Nom..." data-i18n-attr="placeholder:modal.folder.placeholder"></div><div class="modal-footer"><button id="btnSaveFolder" class="primary full-width" data-i18n="modal.folder.create">Créer</button></div></div></div>
+  
+  <div id="imgModal" class="modal-overlay hidden">
+    <div class="modal-content large-modal">
+      <div class="modal-header"><h3 id="imgModalTitle" data-i18n="modal.img.title">Image Gen</h3><button id="btnCloseImgModal" class="close-btn">&times;</button></div>
+      <div class="modal-body scrollable-body">
+        <input type="hidden" id="imgEditId">
+        <label data-i18n="modal.img.titleField">Titre</label><input type="text" id="imgNameInput">
+        <label data-i18n="modal.img.category">Catégorie</label><select id="imgCategorySelect"></select> <label data-i18n="modal.img.model">Modèle IA</label><div class="input-row"><select id="imgModelSelect"></select></div>
+        <label data-i18n="modal.img.cover">Couverture</label><div class="drop-row"><div class="drop-zone" id="dropZoneBefore"><span class="placeholder" data-i18n="modal.img.before">📷 Avant</span><input type="file" accept="image/*" class="hidden-file" id="fileBefore"><img id="previewBefore" class="preview-img hidden"><button class="remove-img-btn hidden" data-target="previewBefore">×</button></div><div class="drop-zone" id="dropZoneAfter"><span class="placeholder" data-i18n="modal.img.after">✨ Après</span><input type="file" accept="image/*" class="hidden-file" id="fileAfter"><img id="previewAfter" class="preview-img hidden"><button class="remove-img-btn hidden" data-target="previewAfter">×</button></div></div>
+        <label data-i18n="modal.img.prompt">Prompt</label><textarea id="imgPromptInput"></textarea><label data-i18n="modal.img.params">Paramètres</label><textarea id="imgParamsInput" class="note-input"></textarea>
+      </div>
+      <div class="modal-footer"><button id="btnSaveImg" class="primary full-width" data-i18n="modal.img.save">Sauvegarder</button></div>
+    </div>
+  </div>
+
+  <div id="imgStepModal" class="modal-overlay hidden"><div class="modal-content"><div class="modal-header"><h3 data-i18n="modal.imgStep.title">Étape Retouche</h3><button id="btnCloseImgStepModal" class="close-btn">&times;</button></div><div class="modal-body"><input type="hidden" id="imgStepEditId"><label data-i18n="modal.imgStep.action">Action</label><input type="text" id="imgStepLabel"><div class="drop-row"><div class="drop-zone small-drop" id="dropZoneStep"><span class="placeholder" data-i18n="modal.imgStep.before">Image Avant</span><input type="file" accept="image/*" class="hidden-file" id="fileStep"><img id="previewStep" class="preview-img hidden"><button class="remove-img-btn hidden" data-target="previewStep">×</button></div><div class="drop-zone small-drop" id="dropZoneStepAfter"><span class="placeholder" data-i18n="modal.imgStep.after">Image Après</span><input type="file" accept="image/*" class="hidden-file" id="fileStepAfter"><img id="previewStepAfter" class="preview-img hidden"><button class="remove-img-btn hidden" data-target="previewStepAfter">×</button></div></div><label data-i18n="modal.imgStep.prompt">Prompt</label><textarea id="imgStepContent"></textarea></div><div class="modal-footer"><button id="btnSaveImgStep" class="primary full-width" data-i18n="modal.imgStep.confirm">Valider</button></div></div></div>
+  <div id="modelsManageModal" class="modal-overlay hidden"><div class="modal-content"><div class="modal-header"><h3 data-i18n="modal.models.title">Gérer les Modèles</h3><button id="btnCloseModelsManage" class="close-btn">&times;</button></div><div class="modal-body"><div class="input-row"><input type="text" id="newModelNameInput" placeholder="Nouveau modèle" data-i18n-attr="placeholder:modal.models.placeholder"><button id="btnAddModel" class_="primary small-btn" data-i18n="modal.models.add">Ajouter</button></div><hr><div id="modelsListContainer" class="models-list-container"></div></div></div></div>
+  <div id="lightboxModal" class="modal-overlay hidden lightbox-overlay">
+    <button id="btnCloseLightbox" class="lightbox-close">&times;</button>
+    <div class="lightbox-controls">
+      <button id="btnLightboxZoomOut" class="lightbox-ctrl-btn" data-i18n-attr="title:lightbox.zoomOut" title="Zoom -">−</button>
+      <button id="btnLightboxReset" class="lightbox-ctrl-btn" data-i18n-attr="title:lightbox.reset" title="Réinitialiser">⟲</button>
+      <button id="btnLightboxZoomIn" class="lightbox-ctrl-btn" data-i18n-attr="title:lightbox.zoomIn" title="Zoom +">+</button>
+      <span id="lightboxZoomLevel" class="lightbox-zoom-info">100%</span>
+    </div>
+    <div id="lightboxStage" class="lightbox-stage">
+      <img id="lightboxImg" src="" alt="Zoom">
+      <div id="lightboxCompare" class="lightbox-compare hidden">
+        <img id="lightboxCompareBefore" class="lightbox-compare-img" src="">
+        <img id="lightboxCompareAfter" class="lightbox-compare-img" src="">
+        <div id="lightboxCompareHandle" class="lightbox-compare-handle"></div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="panel.js"></script>
+</body>
+</html>
