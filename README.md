@@ -4,8 +4,6 @@
 
 **A local-first desktop app to organize your AI prompts and your generated-image library.**
 
-
-
 ![Version](https://img.shields.io/badge/version-3.6.0-10a37f?style=for-the-badge)
 ![License](https://img.shields.io/badge/license-MIT-blue?style=for-the-badge)
 ![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-555?style=for-the-badge)
@@ -18,15 +16,17 @@
 ![Languages](https://img.shields.io/badge/languages-🇫🇷%20FR%20%7C%20🇬🇧%20EN-blueviolet)
 ![Contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen)
 
+<img src="https://github.com/NyxAwroo/AI-Master-Studio/blob/main/screenshots/v1/text%20GPTs%20(2).png" alt="Aperçu AI Master Studio" width="45%"> <img src="https://github.com/NyxAwroo/AI-Master-Studio/blob/main/screenshots/v1/studio%20IMG%20(3).png" alt="Aperçu AI Master Studio" width="40%">
+
 </div>
-
-
 
 ---
 
 ## ✨ What it does
 
 AI Master Studio is a single place to keep everything you would otherwise scatter across notes, screenshots, and chat histories:
+
+<img src="https://github.com/NyxAwroo/AI-Master-Studio/blob/main/screenshots/v1/splitter.png" alt="Aperçu AI Master Studio" width="35%"> <img src="https://github.com/NyxAwroo/AI-Master-Studio/blob/main/screenshots/v1/settings.png" alt="Aperçu AI Master Studio" width="35%">
 
 - **Prompt Splitter** — chop long prompts into ChatGPT / Claude / Gemini-sized pieces with configurable token limits.
 - **Text GPTs library** — folder organization, colored tags, multi-step prompts, list or grid view, advanced search (title, tags, prompt body, individual steps), bulk actions (move, tag, partial export, delete), partial import that merges without overwriting.
