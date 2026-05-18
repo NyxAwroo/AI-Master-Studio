@@ -3,6 +3,7 @@
 # 🎨 AI Master Studio
 
 **A local-first desktop app to organize your AI prompts and your generated-image library.**
+**✨[Sponsor this project](https://www.paypal.com/paypalme/NyxAwroo)**
 
 ![Version](https://img.shields.io/badge/version-3.6.0-10a37f?style=for-the-badge)
 ![License](https://img.shields.io/badge/license-MIT-blue?style=for-the-badge)
