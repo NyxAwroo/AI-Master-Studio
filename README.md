@@ -183,6 +183,13 @@ Then re-run `2-Lancer.bat`.
 See **GUIDE.md** — it explains step by step how to ask an AI assistant (Claude in particular) for a modification, with the right files to attach depending on the type of change.
 
 ---
+### 💛 Support the project
+InstaLocalPlanner is a free, open project developed on personal time. If it helps your Instagram workflow, you can support its development with a donation.
+
+**Donation link:** [PayPal](https://www.paypal.com/paypalme/NyxAwroo) 
+// Donations help fund development time, testing, documentation and future improvements. Huge thanks to anyone who contributes 🙏
+
+---
 
 ## 📜 License
 
