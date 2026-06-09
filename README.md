@@ -5,7 +5,7 @@
 **A local-first desktop app to organize your AI prompts and your generated-image library.**
 **✨[Sponsor this project](https://www.paypal.com/paypalme/NyxAwroo)**
 
-![Version](https://img.shields.io/badge/version-3.6.0-10a37f?style=for-the-badge)
+![Version](https://img.shields.io/badge/version-3.6.1-10a37f?style=for-the-badge)
 ![License](https://img.shields.io/badge/license-MIT-blue?style=for-the-badge)
 ![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-555?style=for-the-badge)
 
